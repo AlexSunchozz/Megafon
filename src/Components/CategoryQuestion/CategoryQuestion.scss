@@ -14,7 +14,7 @@
         &-top.active {
             .question-content-top__icon {
                 transform: rotate(-180deg);
-                transition: transform ease 0.1s;
+                transition: transform ease 0.3s;
             }
         }
 
@@ -32,6 +32,8 @@
             }
 
             &__icon {
+                width: 24px;
+                height: 24px;
                 transition: transform ease 0.1s;
             }
 
@@ -57,7 +59,9 @@
             box-sizing: content-box;
             gap: 16px;
             justify-content: space-between;
-            padding-bottom: 32px;
+            // padding-bottom: 32px;
+            transition: height ease 0.3s;
+            transition: padding-bottom ease 0.3s;
 
             &__descr {
                 color: var(--colorGray);

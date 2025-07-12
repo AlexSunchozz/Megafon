@@ -1,21 +1,25 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './CategoryQuestion.scss';
-import { memo } from 'react';
 
-const CategoryQuestion = ({ question, questionId, answer, rating, updateHeight, isOpenQuestion, isOpenCategory, toggleQuestion, setOpenQuestion }) => {
+const CategoryQuestionWithoutOneTab = ({ question, answer, rating, updateHeight, openQuestion, isOpenCategory, setOpenQuestion, toggleQuestion }) => {
     const answerRef = useRef(null);
 
-    // useEffect(() => {
-    //     // При открытии/закрытии вызываем updateHeight, чтобы родитель пересчитал высоту
-    //     updateHeight?.();
-    // }, [isOpenQuestion, isOpenCategory, updateHeight]);
+    useEffect(() => {
+        // При открытии/закрытии вызываем updateHeight, чтобы родитель пересчитал высоту
+        if (!isOpenCategory) setOpenQuestion(openQuestion => !openQuestion)
+
+        updateHeight?.();
+
+    }, [updateHeight, openQuestion, isOpenCategory, setOpenQuestion]);
+
+    // const toggleClickQuestion = () => setOpenQuestion(openQuestion => !openQuestion)
 
     return (
         <li className="category-list__item question">
             <div className="question-content">
                 <div
-                    className={`question-content-top ${isOpenQuestion ? 'active' : ''}`}
-                    onClick={() => toggleQuestion(questionId)}
+                    className={`question-content-top ${openQuestion ? 'active' : ''}`}
+                    onClick={toggleQuestion}
                 >
                     <p className="question-content-top__descr">ВОПРОС</p>
                     <div className="question-content-top__title">
@@ -31,16 +35,10 @@ const CategoryQuestion = ({ question, questionId, answer, rating, updateHeight, 
                     </div>
                 </div>
 
-                {/* {isOpenQuestion && ( */}
+                {openQuestion && (
                     <div className="question-content-bottom" 
                          ref={answerRef}
-                         style={{
-                            height: isOpenQuestion ? 'auto' : '0px',
-                            transition: 'height ease 0.3s',
-                            transition: 'padding-bottom ease 0.3s',
-                            overflow: 'hidden',
-                            paddingBottom: isOpenQuestion ? '32px' : '0px'
-                         }}>
+                         >
                         <p className="question-content-bottom__descr">ОТВЕТ</p>
                         <div className="question-content-bottom-container">
                             <div className="question-content-bottom__text">{answer}</div>
@@ -55,10 +53,10 @@ const CategoryQuestion = ({ question, questionId, answer, rating, updateHeight, 
                             </div>
                         </div>
                     </div>
-                {/* )} */}
+                )} 
             </div>
         </li>
     );
 };
 
-export default memo(CategoryQuestion);
+export default CategoryQuestionWithoutOneTab;

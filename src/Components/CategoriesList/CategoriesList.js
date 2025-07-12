@@ -1,12 +1,19 @@
-import { useState } from 'react';
+import { useCallback, useReducer, useState } from 'react';
 import Category from '../Category/Category';
+import CategoryWithoutOneTab from '../Category/CategoryWithoutOneTab';
 
 const CategoriesList = ({categories}) => {
-    const [openCategory, setOpencategory] = useState(null);
+    // const [raiting, dispatch] = useReducer(reducer)
 
-    const toggleCategory = (id) => {
-        setOpencategory(openCategory => openCategory === id ? null : id)
-    }
+    // ------------------------- По одной вкладке -------------------------
+
+    const [openCategory, setOpenCategory] = useState(null);
+
+    const toggleCategory = useCallback((id) => {
+        setOpenCategory(openCategory => openCategory === id ? null : id)
+    }, [])
+
+    // --------------------------------------------------------------------
 
     return (
         <ul className="faq-categories">
@@ -16,9 +23,17 @@ const CategoriesList = ({categories}) => {
                 name={category.name}
                 isOpen={openCategory === category.id}
                 questions={category.questions}
-                toggleCategory={() => toggleCategory(category.id)}
+                toggleCategory={toggleCategory}
+                id={category.id}
               />
             ))}
+            {/* {categories.map((category) => (
+                <CategoryWithoutOneTab
+                  key={category.id}
+                  name={category.name}
+                  questions={category.questions}
+              />
+            ))} */}
           </ul>
     );
 }

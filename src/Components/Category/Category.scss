@@ -1,6 +1,6 @@
 .category.active .category-top__icon svg {
     transform: rotate(-180deg);
-    transition: transform ease 0.1s;
+    transition: transform ease 0.3s;
 }
 .category {
     &-top {
@@ -10,7 +10,7 @@
         align-items: center;
         gap: 32px;
 
-        &__icon svg {transition: transform ease 0.1s;}
+        &__icon svg {transition: transform ease 0.3s;}
 
         &__title {
             color: var(--colorGraphite);

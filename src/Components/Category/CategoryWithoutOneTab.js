@@ -1,39 +1,33 @@
 import './Category.scss';
-import CategoryQuestion from "../CategoryQuestion/CategoryQuestion";
+import CategoryQuestionWithoutOneTab from "../CategoryQuestion/CategoryQuestionWithoutOneTab";
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { memo } from "react";
 
-const Category = ({ name, questions, isOpen, toggleCategory, id }) => {
+const CategoryWithoutOneTab = ({ name, questions }) => {
     const contentRef = useRef(null);
     const [maxHeight, setMaxHeight] = useState('0px');
+    const [isOpen, setIsOpen] = useState(null);
     const [openQuestion, setOpenQuestion] = useState(null);
 
     // Обновляем maxHeight в зависимости от состояния isOpen и текущей высоты контента
     const updateHeight = useCallback(() => {
         if (contentRef.current) {
-            setMaxHeight(isOpen ? `${contentRef.current.scrollHeight + parseInt(window.getComputedStyle(contentRef.current).paddingTop,10)}px` : '0px');
+            setMaxHeight(isOpen ? `${contentRef.current.scrollHeight}px` : '0px');
         }
     }, [isOpen]);
 
     // Обновляем maxHeight каждый раз при изменении isOpen
     useEffect(() => {
         updateHeight();
-    }, [openQuestion, updateHeight, isOpen]);
+    }, [isOpen, updateHeight]);
 
-    // Зыкрываем вопросы, при закрытии категории
-    useEffect(() => {
-        if (!isOpen) {
-            setOpenQuestion(null);
-        }
-    }, [isOpen])
-
-    const toggleQuestion = useCallback((id) => {
+    const toggleCategory = () => setIsOpen(isOpen => !isOpen)
+    const toggleQuestion = (id) => {
         setOpenQuestion(openQuestion => openQuestion === id ? null : id)
-    }, [])
+    }
 
     return (
         <li className={`faq-categories__item category ${isOpen ? 'active' : ''}`}>
-            <div className="category-top" onClick={() => toggleCategory(id)}>
+            <div className="category-top" onClick={toggleCategory}>
                 <h3 className="category-top__title">{name}</h3>
                 <div className="category-top__icon">
                     <svg
@@ -53,25 +47,25 @@ const Category = ({ name, questions, isOpen, toggleCategory, id }) => {
 
             <div
                 className="category-list"
+                ref={contentRef}
                 style={{
                     maxHeight,
                     overflow: 'hidden',
                     transition: 'max-height 0.3s ease',
                 }}
             >
-                <ul className="category-list-wrapper"
-                    ref={contentRef}>
+                <ul className="category-list-wrapper">
                     {questions.map(question => (
-                        <CategoryQuestion
+                        <CategoryQuestionWithoutOneTab
                             key={question.id}
                             question={question.question}
                             questionId={question.id}
-                            setOpenQuestion={setOpenQuestion}
                             answer={question.answer}
                             rating={question.rating}
-                            isOpenQuestion={openQuestion === question.id}
                             isOpenCategory={isOpen}
-                            toggleQuestion={toggleQuestion}
+                            openQuestion={openQuestion === question.id}
+                            toggleQuestion={() => toggleQuestion(question.id)}
+                            setOpenQuestion={setOpenQuestion}
                             updateHeight={updateHeight}
                         />
                     ))}
@@ -81,4 +75,4 @@ const Category = ({ name, questions, isOpen, toggleCategory, id }) => {
     );
 };
 
-export default memo(Category);
+export default CategoryWithoutOneTab;
