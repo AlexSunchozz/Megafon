@@ -1,8 +1,7 @@
-import { useCallback, useReducer, useState } from 'react';
+import { useCallback, useState } from 'react';
 import Category from '../Category/Category';
-import CategoryWithoutOneTab from '../Category/CategoryWithoutOneTab';
 
-const CategoriesList = ({categories}) => {
+const CategoriesList = ({categories, onVote, votes}) => {
     // const [raiting, dispatch] = useReducer(reducer)
 
     // ------------------------- По одной вкладке -------------------------
@@ -25,15 +24,10 @@ const CategoriesList = ({categories}) => {
                 questions={category.questions}
                 toggleCategory={toggleCategory}
                 id={category.id}
+                onVote={onVote}
+                votes={votes}
               />
             ))}
-            {/* {categories.map((category) => (
-                <CategoryWithoutOneTab
-                  key={category.id}
-                  name={category.name}
-                  questions={category.questions}
-              />
-            ))} */}
           </ul>
     );
 }

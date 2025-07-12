@@ -3,7 +3,7 @@ import CategoryQuestion from "../CategoryQuestion/CategoryQuestion";
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { memo } from "react";
 
-const Category = ({ name, questions, isOpen, toggleCategory, id }) => {
+const Category = ({ name, questions, isOpen, toggleCategory, id, onVote, votes }) => {
     const contentRef = useRef(null);
     const [maxHeight, setMaxHeight] = useState('0px');
     const [openQuestion, setOpenQuestion] = useState(null);
@@ -59,20 +59,18 @@ const Category = ({ name, questions, isOpen, toggleCategory, id }) => {
                     transition: 'max-height 0.3s ease',
                 }}
             >
-                <ul className="category-list-wrapper"
+                <ul className={`category-list-wrapper ${openQuestion ? 'active' : ''}`}
                     ref={contentRef}>
                     {questions.map(question => (
                         <CategoryQuestion
                             key={question.id}
-                            question={question.question}
-                            questionId={question.id}
-                            setOpenQuestion={setOpenQuestion}
+                            question={question}
                             answer={question.answer}
                             rating={question.rating}
                             isOpenQuestion={openQuestion === question.id}
-                            isOpenCategory={isOpen}
                             toggleQuestion={toggleQuestion}
-                            updateHeight={updateHeight}
+                            onVote={onVote}
+                            isVotes={votes[question.id] !== undefined}
                         />
                     ))}
                 </ul>
