@@ -7,36 +7,19 @@ const DATA_URL = 'data/data.json';
 
 function App() {
   const [categories, setCategories] = useState([]);
-  // const [sortedCategories, setSortedCategories] = useState([]);
+  const [sortedCategories, setSortedCategories] = useState([]);
+  const [isLoading, setIsLoading] = useState(true)
 
-  // Получение данных
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        const res = await fetch(DATA_URL);
 
-        if (!res.ok) throw new Error("Ошибка загрузки данных");
+  // Для сортировки c Local Storage -----
 
-        const json = await res.json();
-
-        setCategories(json.categories);
-        
-      } catch (error) {
-        console.error("Ошибка:", error);
-      }
-    };
-
-    loadData();
-  }, []);
-
-  // const sortCategories = () => {
-
-  // }
-
-  const initialVaotes = () => {
+  const initialVotes = () => {
     const votes = localStorage.getItem('votes');
     return votes ? JSON.parse(votes) : {};
   }
+
+  // ------------------------------------
+
 
   const votesReducer = (state, action) => {
     
@@ -57,21 +40,79 @@ function App() {
     }
   }
 
-  const [votes, dispatch] = useReducer(votesReducer, {}, initialVaotes);
+  // Для сортировки с LocalStorage ---------------------------------------
+  const [votes, dispatch] = useReducer(votesReducer, {}, initialVotes);
+  // ---------------------------------------------------------------------
+
+  // Для сортировки без LocalStorage -------------------------------------
+  // const [votes, dispatch] = useReducer(votesReducer, {});
+  // ---------------------------------------------------------------------
 
   const handleVote = useCallback((payload) => {
     dispatch({ type: "VOTE", payload });
   }, []);
+
+  // Получение данных
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const res = await fetch(DATA_URL);
+
+        if (!res.ok) throw new Error("Ошибка загрузки данных");
+
+        const json = await res.json();
+
+        if (json.categories.length > 0) {
+          setCategories(json.categories); 
+          setIsLoading(false)
+        }
+        
+      } catch (error) {
+        console.error("Ошибка:", error);
+      }
+    };
+
+    loadData();
+  }, []);
+
+  // Сортировка данных
+  useEffect(() => {
+    if (categories.length > 0) {
+
+      const sortCategories = (categories) => {
+        // Сортировка вопросов внутри категорий и категорий по общему рейтингу вопросов
+        return [...categories]
+        .map((category, i) => ({
+          ...category, 
+          questions: [...category.questions].sort((a, b) => {
+              const ratingA = votes[a.id] || 0;
+              const ratingB = votes[b.id] || 0;
+              return ratingB - ratingA;
+            })
+          })
+        ).sort((a,b) => {
+          const totalRatingA = a.questions.reduce((sum, question) => sum + (votes[question.id] || 0), 0);
+          const totalRatingB = b.questions.reduce((sum, question) => sum + (votes[question.id] || 0), 0);
+          return totalRatingB - totalRatingA
+        });
+      }
+
+      const sorted = sortCategories(categories);
+      setSortedCategories(sorted)
+    }
+  }, [categories, votes])
 
   return (
     <div className="app-wrapper">
       <section className="faq">
         <div className="faq-container container">
           <div className="faq-title"><h2>FAQ</h2></div>
+          {isLoading ? (<div>Загрузка FAQ...</div>) :
           <CategoriesList 
-            categories={categories}
+            categories={sortedCategories}
             onVote={handleVote}
             votes={votes}/>
+          }
         </div>
       </section>
     </div>
