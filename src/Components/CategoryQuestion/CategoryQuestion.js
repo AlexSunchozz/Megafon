@@ -1,9 +1,7 @@
-import { useRef  } from 'react';
 import './CategoryQuestion.scss';
 import { memo } from 'react';
 
-const CategoryQuestion = ({ question, answer, onVote, isVotes, isOpenQuestion, toggleQuestion }) => {
-    const answerRef = useRef(null);
+const CategoryQuestion = ({ question, onVote, isVotes, isOpenQuestion, toggleQuestion }) => {
 
     return (
         <div className={`category-list__item question ${isOpenQuestion ? 'active' : ''}`}
@@ -29,21 +27,21 @@ const CategoryQuestion = ({ question, answer, onVote, isVotes, isOpenQuestion, t
                         </div>
                     </div>
                 </div>
-                <div className="question-content-bottom" 
-                        ref={answerRef}
+                <div className={`question-content-bottom ${isOpenQuestion ? 'active' : ''}`} 
                         role="region"
                         aria-labelledby={`question-header-${question.id}`}
-                        style={{
-                        height: isOpenQuestion ? 'auto' : '0px',
-                        transitionProperty: 'height, padding-bottom',
-                        transitionDuration: '0.3s',
-                        transitionTimingFunction: "ease",
-                        overflow: 'hidden',
-                        paddingBottom: isOpenQuestion ? '32px' : '0px'
-                        }}>
+                        // style={{
+                        // height: isOpenQuestion ? 'auto' : '0px',
+                        // transitionProperty: 'height, padding-bottom',
+                        // transitionDuration: '0.3s',
+                        // transitionTimingFunction: "ease",
+                        // overflow: 'hidden',
+                        // paddingBottom: isOpenQuestion ? '32px' : '0px'
+                        // }}
+                        >
                     <p className="question-content-bottom__descr">ОТВЕТ</p>
                     <div className="question-content-bottom-container">
-                        <div className="question-content-bottom__text">{answer}</div>
+                        <div className="question-content-bottom__text">{question.answer}</div>
                         <div className="question-bottom__raiting raiting">
                             <div className="raiting-container">
                                 {isVotes ? 

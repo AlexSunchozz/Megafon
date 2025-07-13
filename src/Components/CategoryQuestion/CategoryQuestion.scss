@@ -56,14 +56,24 @@
             }
         }
 
+        &-bottom.active {
+            height: auto;
+            transition-property: height, padding-bottom;
+            transition-duration: 0.3s;
+            transition-timing-function: ease;
+            padding-bottom: 32px;
+        }
         &-bottom {
             display: flex;
             box-sizing: content-box;
             gap: 16px;
+            height: 0px;
+            overflow: hidden;
             justify-content: space-between;
             transition-property: height, padding-bottom;
             transition-duration: 0.3s;
             transition-timing-function: ease;
+            padding-bottom: 0px;
 
             &__descr {
                 color: var(--colorGray);

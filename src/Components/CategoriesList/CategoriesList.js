@@ -1,26 +1,8 @@
-import { useCallback, useState } from 'react';
 import Category from '../Category/Category';
+import { useAccordion } from '../Hooks/useAccordion';
 
 const CategoriesList = ({categories, onVote, votes}) => {
-    // ------------------------- По одной вкладке -------------------------
-
-    // const [openCategory, setOpenCategory] = useState(null);
-
-    // const toggleCategory = useCallback((id) => {
-    //     setOpenCategory(openCategory => openCategory === id ? null : id)
-    // }, [])
-
-    // --------------------------------------------------------------------
-
-    // ----------------------- По несколько вкладок ------------------------
-
-    const [openCategories, setOpenCategory] = useState([]);
-
-    const toggleCategory = useCallback((id) => {
-        setOpenCategory(openCategories => openCategories.includes(id) ? openCategories.filter(categoryId => categoryId !== id) : [...openCategories, id])
-    }, [])
-
-    // --------------------------------------------------------------------
+    const {toggleTab, isTabOpen} = useAccordion({mode: 'multiply'})
 
     return (
         <div className="faq-categories" role="list">
@@ -28,12 +10,9 @@ const CategoriesList = ({categories, onVote, votes}) => {
               <Category
                 key={category.id}
                 name={category.name}
-                // По одной вкладке
-                // isOpen={openCategory === category.id}
-                // По несколько вкладок
-                isOpen={openCategories.includes(category.id)}
+                isOpen={isTabOpen(category.id)}
                 questions={category.questions}
-                toggleCategory={toggleCategory}
+                toggleCategory={toggleTab}
                 id={category.id}
                 onVote={onVote}
                 votes={votes}

@@ -3,6 +3,11 @@
     transition: transform ease 0.3s;
 }
 .category {
+    &-list {
+        overflow: hidden;
+        transition: max-height 0.3s ease
+    }
+
     &-top {
         cursor: pointer;
         display: flex;

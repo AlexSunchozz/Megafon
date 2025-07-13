@@ -1,61 +1,36 @@
 import './Category.scss';
 import CategoryQuestion from "../CategoryQuestion/CategoryQuestion";
 import { useState, useRef, useEffect, useCallback } from 'react';
+import { useAccordion } from '../Hooks/useAccordion';
 import { memo } from "react";
 
 const Category = ({ name, questions, isOpen, toggleCategory, id, onVote, votes }) => {
     const contentRef = useRef(null);
     const [maxHeight, setMaxHeight] = useState('0px');
 
-    // Раскрытие по одной вкладке вопроса ------------------
-    // const [openQuestion, setOpenQuestion] = useState(null);
-    // ------------------------------------------------------
-
-    // Раскрытие по несколько вкладок вопросов --------------
-    const [openQuestions, setOpenQuestion] = useState([]);
-    // ------------------------------------------------------
+    const {toggleTab, isTabOpen, tab, clearTabs} = useAccordion({mode: 'multiply'})
 
     // Обновляем maxHeight в зависимости от состояния isOpen и текущей высоты контента
     const updateHeight = useCallback(() => {
         if (contentRef.current) {
-            setMaxHeight(isOpen ? `${contentRef.current.scrollHeight + parseInt(window.getComputedStyle(contentRef.current).paddingTop,10)}px` : '0px');
+            setMaxHeight(isOpen 
+                ? `${contentRef.current.scrollHeight + parseInt(window.getComputedStyle(contentRef.current).paddingTop,10)}px` 
+                : '0px');
         }
     }, [isOpen]);
 
+    
     // Обновляем maxHeight каждый раз при изменении isOpen
     useEffect(() => {
         updateHeight();
-    }, [openQuestions, updateHeight, isOpen]);
+    }, [tab, updateHeight, isOpen]);
 
     // Зыкрываем вопросы, при закрытии категории
     useEffect(() => {
         if (!isOpen) {
-            // По одной вкладке
-            // setOpenQuestion(null);
-
-            // Несколько вкладок сразу
-            setOpenQuestion([]);
+            clearTabs();
         }
-    }, [isOpen])
-
-
-    // Раскрытие по одной вкладке ----------------------------------------
-
-    // const toggleQuestion = useCallback((id) => {
-    //     setOpenQuestion(openQuestion => openQuestion === id ? null : id)
-    // }, [])
-
-    // --------------------------------------------------------------------
-
-
-
-    // Раскрытие по несколько вкладок -------------------------------------
-
-    const toggleQuestion = useCallback((id) => {
-        setOpenQuestion(openQuestions => openQuestions.includes(id) ? openQuestions.filter(questionId => questionId !== id) : [...openQuestions, id])
-    }, [])
-
-    // --------------------------------------------------------------------
+    }, [isOpen, clearTabs])
 
     return (
         <div role="listitem" className={`faq-categories__item category ${isOpen ? 'active' : ''}`}>
@@ -87,12 +62,10 @@ const Category = ({ name, questions, isOpen, toggleCategory, id, onVote, votes }
                  aria-labelledby={`category-header-${id}`}
                  style={{
                     maxHeight,
-                    overflow: 'hidden',
-                    transition: 'max-height 0.3s ease',
                  }}
             >
                 <div role="list"
-                    className={`category-list-wrapper ${openQuestions ? 'active' : ''}`}
+                    className={`category-list-wrapper ${tab ? 'active' : ''}`}
                     ref={contentRef}
                     aria-label={`Список вопросов по теме ${name}`}
                     >
@@ -100,15 +73,8 @@ const Category = ({ name, questions, isOpen, toggleCategory, id, onVote, votes }
                         <CategoryQuestion
                             key={question.id}
                             question={question}
-                            answer={question.answer}
-                            rating={question.rating}
-                            // Раскрытие по однйо вкладке вопроса
-                            // isOpenQuestion={openQuestion === question.id}
-                            // 
-                            // Раскрытие всех вкладок
-                            isOpenQuestion={openQuestions.includes(question.id)}
-                            // 
-                            toggleQuestion={toggleQuestion}
+                            isOpenQuestion={isTabOpen(question.id)}
+                            toggleQuestion={toggleTab}
                             onVote={onVote}
                             isVotes={votes[question.id] !== undefined}
                         />

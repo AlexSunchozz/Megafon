@@ -2,7 +2,6 @@ import './App.scss';
 import { useEffect, useReducer, useState, useCallback } from 'react';
 import CategoriesList from '../CategoriesList/CategoriesList';
 
-// const DATA_URL = 'https://gist.githubusercontent.com/atihonem/f5776c4b1cdc6374aa46f5f544636469/raw/a9180f6b17fe2b99404ad335ed83dbdc0d996371/data.json';
 const DATA_URL = process.env.PUBLIC_URL + '/data/data.json';
 
 function AppWithSortAfterVoitiong() {
