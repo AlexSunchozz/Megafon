@@ -58,8 +58,13 @@ const Category = ({ name, questions, isOpen, toggleCategory, id, onVote, votes }
     // --------------------------------------------------------------------
 
     return (
-        <li className={`faq-categories__item category ${isOpen ? 'active' : ''}`}>
-            <div className="category-top" onClick={() => toggleCategory(id)}>
+        <div role="listitem" className={`faq-categories__item category ${isOpen ? 'active' : ''}`}>
+            <div className="category-top" 
+                    aria-expanded={isOpen}
+                    role="button"
+                    aria-controls={`category-content-${id}`}
+                    id={`category-header-${id}`}
+                    onClick={() => toggleCategory(id)}>
                 <h3 className="category-top__title">{name}</h3>
                 <div className="category-top__icon">
                     <svg
@@ -76,16 +81,21 @@ const Category = ({ name, questions, isOpen, toggleCategory, id, onVote, votes }
                     </svg>
                 </div>
             </div>
-            <div
-                className="category-list"
-                style={{
+            <div className="category-list"
+                 id={`category-content-${id}`}
+                 role="region"
+                 aria-labelledby={`category-header-${id}`}
+                 style={{
                     maxHeight,
                     overflow: 'hidden',
                     transition: 'max-height 0.3s ease',
-                }}
+                 }}
             >
-                <ul className={`category-list-wrapper ${openQuestions ? 'active' : ''}`}
-                    ref={contentRef}>
+                <div role="list"
+                    className={`category-list-wrapper ${openQuestions ? 'active' : ''}`}
+                    ref={contentRef}
+                    aria-label={`Список вопросов по теме ${name}`}
+                    >
                     {questions.map(question => (
                         <CategoryQuestion
                             key={question.id}
@@ -94,16 +104,18 @@ const Category = ({ name, questions, isOpen, toggleCategory, id, onVote, votes }
                             rating={question.rating}
                             // Раскрытие по однйо вкладке вопроса
                             // isOpenQuestion={openQuestion === question.id}
+                            // 
                             // Раскрытие всех вкладок
                             isOpenQuestion={openQuestions.includes(question.id)}
+                            // 
                             toggleQuestion={toggleQuestion}
                             onVote={onVote}
                             isVotes={votes[question.id] !== undefined}
                         />
                     ))}
-                </ul>
+                </div>
             </div>
-        </li>
+        </div>
     );
 };
 

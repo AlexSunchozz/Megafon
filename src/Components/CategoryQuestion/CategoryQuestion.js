@@ -6,9 +6,13 @@ const CategoryQuestion = ({ question, answer, onVote, isVotes, isOpenQuestion, t
     const answerRef = useRef(null);
 
     return (
-        <li className={`category-list__item question ${isOpenQuestion ? 'active' : ''}`}>
+        <div className={`category-list__item question ${isOpenQuestion ? 'active' : ''}`}
+             role='listitem'>
             <div className="question-content">
-                <div
+                <div aria-expanded={isOpenQuestion}
+                    aria-controls={`question-content-${question.id}`}
+                    id={`question-header-${question.id}`}
+                    role="button"
                     className="question-content-top"
                     onClick={() => toggleQuestion(question.id)}
                 >
@@ -27,6 +31,8 @@ const CategoryQuestion = ({ question, answer, onVote, isVotes, isOpenQuestion, t
                 </div>
                 <div className="question-content-bottom" 
                         ref={answerRef}
+                        role="region"
+                        aria-labelledby={`question-header-${question.id}`}
                         style={{
                         height: isOpenQuestion ? 'auto' : '0px',
                         transitionProperty: 'height, padding-bottom',
@@ -58,7 +64,7 @@ const CategoryQuestion = ({ question, answer, onVote, isVotes, isOpenQuestion, t
                     </div>
                 </div>
             </div>
-        </li>
+        </div>
     );
 };
 

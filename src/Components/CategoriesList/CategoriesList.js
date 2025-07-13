@@ -23,7 +23,7 @@ const CategoriesList = ({categories, onVote, votes}) => {
     // --------------------------------------------------------------------
 
     return (
-        <ul className="faq-categories">
+        <div className="faq-categories" role="list">
             {categories.map((category) => (
               <Category
                 key={category.id}
@@ -39,7 +39,7 @@ const CategoriesList = ({categories, onVote, votes}) => {
                 votes={votes}
               />
             ))}
-          </ul>
+          </div>
     );
 }
 
