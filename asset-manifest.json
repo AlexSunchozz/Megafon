@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/AlexSunchozz/Megafon/static/css/main.0885b960.css",
-    "main.js": "/AlexSunchozz/Megafon/static/js/main.29b3b265.js",
-    "static/media/MegaFon-Graphik-LC-Semibold.woff": "/AlexSunchozz/Megafon/static/media/MegaFon-Graphik-LC-Semibold.a5e63372bcb803bc503e.woff",
-    "static/media/MegaFon-Graphik-LC-Medium.woff": "/AlexSunchozz/Megafon/static/media/MegaFon-Graphik-LC-Medium.13a311b8f34bd790be09.woff",
-    "static/media/MegaFon-Graphik-LC-Regular.woff": "/AlexSunchozz/Megafon/static/media/MegaFon-Graphik-LC-Regular.a44633aa521eff81857d.woff",
-    "index.html": "/AlexSunchozz/Megafon/index.html",
-    "main.0885b960.css.map": "/AlexSunchozz/Megafon/static/css/main.0885b960.css.map",
-    "main.29b3b265.js.map": "/AlexSunchozz/Megafon/static/js/main.29b3b265.js.map"
+    "main.css": "/Megafon/static/css/main.5b37874e.css",
+    "main.js": "/Megafon/static/js/main.a3b050b4.js",
+    "static/media/MegaFon-Graphik-LC-Semibold.woff": "/Megafon/static/media/MegaFon-Graphik-LC-Semibold.a5e63372bcb803bc503e.woff",
+    "static/media/MegaFon-Graphik-LC-Medium.woff": "/Megafon/static/media/MegaFon-Graphik-LC-Medium.13a311b8f34bd790be09.woff",
+    "static/media/MegaFon-Graphik-LC-Regular.woff": "/Megafon/static/media/MegaFon-Graphik-LC-Regular.a44633aa521eff81857d.woff",
+    "index.html": "/Megafon/index.html",
+    "main.5b37874e.css.map": "/Megafon/static/css/main.5b37874e.css.map",
+    "main.a3b050b4.js.map": "/Megafon/static/js/main.a3b050b4.js.map"
   },
   "entrypoints": [
-    "static/css/main.0885b960.css",
-    "static/js/main.29b3b265.js"
+    "static/css/main.5b37874e.css",
+    "static/js/main.a3b050b4.js"
   ]
 }
