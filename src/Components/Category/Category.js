@@ -6,7 +6,14 @@ import { memo } from "react";
 const Category = ({ name, questions, isOpen, toggleCategory, id, onVote, votes }) => {
     const contentRef = useRef(null);
     const [maxHeight, setMaxHeight] = useState('0px');
-    const [openQuestion, setOpenQuestion] = useState(null);
+
+    // Раскрытие по одной вкладке вопроса ------------------
+    // const [openQuestion, setOpenQuestion] = useState(null);
+    // ------------------------------------------------------
+
+    // Раскрытие по несколько вкладок вопросов --------------
+    const [openQuestions, setOpenQuestion] = useState([]);
+    // ------------------------------------------------------
 
     // Обновляем maxHeight в зависимости от состояния isOpen и текущей высоты контента
     const updateHeight = useCallback(() => {
@@ -18,18 +25,37 @@ const Category = ({ name, questions, isOpen, toggleCategory, id, onVote, votes }
     // Обновляем maxHeight каждый раз при изменении isOpen
     useEffect(() => {
         updateHeight();
-    }, [openQuestion, updateHeight, isOpen]);
+    }, [openQuestions, updateHeight, isOpen]);
 
     // Зыкрываем вопросы, при закрытии категории
     useEffect(() => {
         if (!isOpen) {
-            setOpenQuestion(null);
+            // По одной вкладке
+            // setOpenQuestion(null);
+
+            // Несколько вкладок сразу
+            setOpenQuestion([]);
         }
     }, [isOpen])
 
+
+    // Раскрытие по одной вкладке ----------------------------------------
+
+    // const toggleQuestion = useCallback((id) => {
+    //     setOpenQuestion(openQuestion => openQuestion === id ? null : id)
+    // }, [])
+
+    // --------------------------------------------------------------------
+
+
+
+    // Раскрытие по одной вкладке ----------------------------------------
+
     const toggleQuestion = useCallback((id) => {
-        setOpenQuestion(openQuestion => openQuestion === id ? null : id)
+        setOpenQuestion(openQuestions => openQuestions.includes(id) ? openQuestions.filter(questionId => questionId !== id) : [...openQuestions, id])
     }, [])
+
+    // --------------------------------------------------------------------
 
     return (
         <li className={`faq-categories__item category ${isOpen ? 'active' : ''}`}>
@@ -50,7 +76,6 @@ const Category = ({ name, questions, isOpen, toggleCategory, id, onVote, votes }
                     </svg>
                 </div>
             </div>
-
             <div
                 className="category-list"
                 style={{
@@ -59,7 +84,7 @@ const Category = ({ name, questions, isOpen, toggleCategory, id, onVote, votes }
                     transition: 'max-height 0.3s ease',
                 }}
             >
-                <ul className={`category-list-wrapper ${openQuestion ? 'active' : ''}`}
+                <ul className={`category-list-wrapper ${openQuestions ? 'active' : ''}`}
                     ref={contentRef}>
                     {questions.map(question => (
                         <CategoryQuestion
@@ -67,7 +92,10 @@ const Category = ({ name, questions, isOpen, toggleCategory, id, onVote, votes }
                             question={question}
                             answer={question.answer}
                             rating={question.rating}
-                            isOpenQuestion={openQuestion === question.id}
+                            // Раскрытие по однйо вкладке вопроса
+                            // isOpenQuestion={openQuestion === question.id}
+                            // Раскрытие всех вкладок
+                            isOpenQuestion={openQuestions.includes(question.id)}
                             toggleQuestion={toggleQuestion}
                             onVote={onVote}
                             isVotes={votes[question.id] !== undefined}

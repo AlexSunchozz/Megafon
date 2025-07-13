@@ -63,13 +63,13 @@ function App() {
   const sortCategories = useCallback((categories) => {
   return [...categories]
   .map((category) => ({
-    ...category, 
-    questions: [...category.questions].sort((a, b) => {
+      ...category, 
+      questions: [...category.questions].sort((a, b) => {
         const ratingA = votes[a.id] || 0;
         const ratingB = votes[b.id] || 0;
+
         // Если рейтинг вопросов одинаковые, то сохраняем изначальный порядок из файла (устойчивая сортировка)
         return ratingB !== ratingA ? ratingB - ratingA : a.id - b.id;
-        
       })
     })).sort((a,b) => {
       const totalRatingA = a.questions.reduce((sum, question) => sum + (votes[question.id] || 0), 0);
@@ -107,7 +107,7 @@ function App() {
     };
 
     loadData();
-  }, [sortCategories]);
+  }, []);
 
 
   // Сортировка данных сразу после голосования
