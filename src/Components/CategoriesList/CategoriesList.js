@@ -2,8 +2,6 @@ import { useCallback, useState } from 'react';
 import Category from '../Category/Category';
 
 const CategoriesList = ({categories, onVote, votes}) => {
-    // const [raiting, dispatch] = useReducer(reducer)
-
     // ------------------------- По одной вкладке -------------------------
 
     const [openCategory, setOpenCategory] = useState(null);

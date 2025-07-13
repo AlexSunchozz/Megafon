@@ -22,7 +22,6 @@ function App() {
 
 
   const votesReducer = (state, action) => {
-    
     const {questionId, value} = action.payload;
 
     switch(action.type) {
@@ -30,27 +29,54 @@ function App() {
         const updatedVotes = {...state, [questionId]: (state[questionId] || 0) + value}
 
         //Обновляем local storage
-        localStorage.setItem('votes', JSON.stringify(updatedVotes))
+        localStorage.setItem('votes', JSON.stringify(updatedVotes));
+
         console.log(`Вы проголосовали за вопрос: ${questionId}. Теперь рейтинг вопроса: ${updatedVotes[questionId]}`)
         
         return updatedVotes
 
       default:
-        return state;
+        throw new Error(`Unhandled action type: ${action.type}`);
     }
   }
 
+
   // Для сортировки с LocalStorage ---------------------------------------
+
   const [votes, dispatch] = useReducer(votesReducer, {}, initialVotes);
+
   // ---------------------------------------------------------------------
 
+
   // Для сортировки без LocalStorage -------------------------------------
+
   // const [votes, dispatch] = useReducer(votesReducer, {});
+
   // ---------------------------------------------------------------------
+
 
   const handleVote = useCallback((payload) => {
     dispatch({ type: "VOTE", payload });
   }, []);
+
+  // Сортировка вопросов внутри категорий и категорий по общему рейтингу вопросов
+  const sortCategories = useCallback((categories) => {
+  return [...categories]
+  .map((category) => ({
+    ...category, 
+    questions: [...category.questions].sort((a, b) => {
+        const ratingA = votes[a.id] || 0;
+        const ratingB = votes[b.id] || 0;
+        // Если рейтинг вопросов одинаковые, то сохраняем изначальный порядок из файла (устойчивая сортировка)
+        return ratingB !== ratingA ? ratingB - ratingA : a.id - b.id;
+        
+      })
+    })).sort((a,b) => {
+      const totalRatingA = a.questions.reduce((sum, question) => sum + (votes[question.id] || 0), 0);
+      const totalRatingB = b.questions.reduce((sum, question) => sum + (votes[question.id] || 0), 0);
+      return totalRatingB - totalRatingA
+    });
+  }, [votes])
 
   // Получение данных
   useEffect(() => {
@@ -64,54 +90,50 @@ function App() {
 
         if (json.categories.length > 0) {
           setCategories(json.categories); 
-          setIsLoading(false)
+
+          // Сортировка только при обновлении страницы
+
+          // setSortedCategories(sortCategories(json.categories));
+
+          // -----------------------------------------
         }
         
       } catch (error) {
         console.error("Ошибка:", error);
       }
+      finally {
+        setIsLoading(false);
+      }
     };
 
     loadData();
-  }, []);
+  }, [sortCategories]);
 
-  // Сортировка данных
+
+  // Сортировка данных сразу после голосования
+
   useEffect(() => {
     if (categories.length > 0) {
-
-      const sortCategories = (categories) => {
-        // Сортировка вопросов внутри категорий и категорий по общему рейтингу вопросов
-        return [...categories]
-        .map((category, i) => ({
-          ...category, 
-          questions: [...category.questions].sort((a, b) => {
-              const ratingA = votes[a.id] || 0;
-              const ratingB = votes[b.id] || 0;
-              return ratingB - ratingA;
-            })
-          })
-        ).sort((a,b) => {
-          const totalRatingA = a.questions.reduce((sum, question) => sum + (votes[question.id] || 0), 0);
-          const totalRatingB = b.questions.reduce((sum, question) => sum + (votes[question.id] || 0), 0);
-          return totalRatingB - totalRatingA
-        });
-      }
-
       const sorted = sortCategories(categories);
       setSortedCategories(sorted)
     }
-  }, [categories, votes])
+  }, [categories, sortCategories])
+
+  // -----------------------------------------
+
 
   return (
     <div className="app-wrapper">
       <section className="faq">
         <div className="faq-container container">
           <div className="faq-title"><h2>FAQ</h2></div>
-          {isLoading ? (<div>Загрузка FAQ...</div>) :
-          <CategoriesList 
-            categories={sortedCategories}
-            onVote={handleVote}
-            votes={votes}/>
+          {isLoading ? (
+            <div>Загрузка FAQ...</div>
+          ) :
+            <CategoriesList 
+              categories={sortedCategories}
+              onVote={handleVote}
+              votes={votes}/>
           }
         </div>
       </section>
