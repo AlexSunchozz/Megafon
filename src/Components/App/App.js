@@ -3,7 +3,7 @@ import { useEffect, useReducer, useState, useCallback } from 'react';
 import CategoriesList from '../CategoriesList/CategoriesList';
 
 // const DATA_URL = 'https://gist.githubusercontent.com/atihonem/f5776c4b1cdc6374aa46f5f544636469/raw/a9180f6b17fe2b99404ad335ed83dbdc0d996371/data.json';
-const DATA_URL = 'data/data.json';
+const DATA_URL = process.env.PUBLIC_URL + '/data/data.json';
 
 function App() {
   const [categories, setCategories] = useState([]);
@@ -64,12 +64,13 @@ function App() {
   return [...categories]
   .map((category) => ({
       ...category, 
-      questions: [...category.questions].sort((a, b) => {
+      // Добавляем индекс к каждому вопросу в случае, если в json придут вопросы не по порядку своего id
+      questions: [...category.questions.map((question, i) => ({...question, index: i}))].sort((a, b) => {
         const ratingA = votes[a.id] || 0;
         const ratingB = votes[b.id] || 0;
 
         // Если рейтинг вопросов одинаковые, то сохраняем изначальный порядок из файла (устойчивая сортировка)
-        return ratingB !== ratingA ? ratingB - ratingA : a.id - b.id;
+        return ratingB !== ratingA ? ratingB - ratingA : a.index - b.index;
       })
     })).sort((a,b) => {
       const totalRatingA = a.questions.reduce((sum, question) => sum + (votes[question.id] || 0), 0);
@@ -93,7 +94,7 @@ function App() {
 
           // Сортировка только при обновлении страницы
 
-          // setSortedCategories(sortCategories(json.categories));
+          setSortedCategories(sortCategories(json.categories));
 
           // -----------------------------------------
         }
@@ -107,17 +108,17 @@ function App() {
     };
 
     loadData();
-  }, []);
+  }, [sortCategories]);
 
 
   // Сортировка данных сразу после голосования
 
-  useEffect(() => {
-    if (categories.length > 0) {
-      const sorted = sortCategories(categories);
-      setSortedCategories(sorted)
-    }
-  }, [categories, sortCategories])
+  // useEffect(() => {
+  //   if (categories.length > 0) {
+  //     const sorted = sortCategories(categories);
+  //     setSortedCategories(sorted)
+  //   }
+  // }, [categories, sortCategories])
 
   // -----------------------------------------
 
