@@ -49,7 +49,7 @@ const Category = ({ name, questions, isOpen, toggleCategory, id, onVote, votes }
 
 
 
-    // Раскрытие по одной вкладке ----------------------------------------
+    // Раскрытие по несколько вкладок -------------------------------------
 
     const toggleQuestion = useCallback((id) => {
         setOpenQuestion(openQuestions => openQuestions.includes(id) ? openQuestions.filter(questionId => questionId !== id) : [...openQuestions, id])

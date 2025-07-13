@@ -6,6 +6,10 @@ import CategoriesList from '../CategoriesList/CategoriesList';
 const DATA_URL = process.env.PUBLIC_URL + '/data/data.json';
 
 function App() {
+  // Для сортировки сразу при голосовании
+  const [categories, setCategories] = useState([]);
+  // 
+
   const [sortedCategories, setSortedCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -59,26 +63,26 @@ function App() {
 
 
   // Сортировка вопросов внутри категорий и категорий по общему рейтингу вопросов
-  
-  // Только при обновлении страницы -------------------------------------------------------------------------
-  const sortCategories = (categories, votes) => {
-  return [...categories]
-  .map((category) => ({
-      ...category, 
-      // Добавляем индекс к каждому вопросу в случае, если в json придут вопросы не по порядку своего id
-      questions: [...category.questions.map((question, i) => ({...question, index: i}))].sort((a, b) => {
-          const ratingA = votes[a.id] || 0;
-          const ratingB = votes[b.id] || 0;
 
-          // Если рейтинг вопросов одинаковые, то сохраняем изначальный порядок из файла (устойчивая сортировка)
-          return ratingB !== ratingA ? ratingB - ratingA : a.index - b.index;
-      })
-      })).sort((a,b) => {
-      const totalRatingA = a.questions.reduce((sum, question) => sum + (votes[question.id] || 0), 0);
-      const totalRatingB = b.questions.reduce((sum, question) => sum + (votes[question.id] || 0), 0);
-      return totalRatingB - totalRatingA
-      });
-  }
+  // Сразу при голосовании -------------------------------------------------------------------------------
+  const sortCategories = useCallback((categories) => {
+      return [...categories]
+      .map((category) => ({
+          ...category, 
+          // Добавляем индекс к каждому вопросу в случае, если в json придут вопросы не по порядку своего id
+          questions: [...category.questions.map((question, i) => ({...question, index: i}))].sort((a, b) => {
+              const ratingA = votes[a.id] || 0;
+              const ratingB = votes[b.id] || 0;
+
+              // Если рейтинг вопросов одинаковые, то сохраняем изначальный порядок из файла (устойчивая сортировка)
+              return ratingB !== ratingA ? ratingB - ratingA : a.index - b.index;
+          })
+          })).sort((a,b) => {
+          const totalRatingA = a.questions.reduce((sum, question) => sum + (votes[question.id] || 0), 0);
+          const totalRatingB = b.questions.reduce((sum, question) => sum + (votes[question.id] || 0), 0);
+          return totalRatingB - totalRatingA
+          });
+  }, [votes])
 
 
   // Получение данных
@@ -92,9 +96,7 @@ function App() {
         const json = await res.json();
 
         if (json.categories.length > 0) {
-          const votesFromStorage = initialVotes();
-
-          setSortedCategories(sortCategories(json.categories, votesFromStorage));
+          setCategories(json.categories); 
         }
         
       } catch (error) {
@@ -107,6 +109,19 @@ function App() {
 
     loadData();
   }, []);
+
+
+  // Сортировка данных сразу после голосования
+
+  useEffect(() => {
+    if (categories.length > 0) {
+      const sorted = sortCategories(categories);
+      setSortedCategories(sorted)
+    }
+  }, [categories, sortCategories])
+
+  // -----------------------------------------
+
 
   return (
     <div className="app-wrapper">
