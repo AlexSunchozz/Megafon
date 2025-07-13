@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/Megafon/static/css/main.5b37874e.css",
-    "main.js": "/Megafon/static/js/main.2ce37eea.js",
+    "main.css": "/Megafon/static/css/main.e588bb9b.css",
+    "main.js": "/Megafon/static/js/main.e1fbf367.js",
     "static/media/MegaFon-Graphik-LC-Semibold.woff": "/Megafon/static/media/MegaFon-Graphik-LC-Semibold.a5e63372bcb803bc503e.woff",
     "static/media/MegaFon-Graphik-LC-Medium.woff": "/Megafon/static/media/MegaFon-Graphik-LC-Medium.13a311b8f34bd790be09.woff",
     "static/media/MegaFon-Graphik-LC-Regular.woff": "/Megafon/static/media/MegaFon-Graphik-LC-Regular.a44633aa521eff81857d.woff",
     "index.html": "/Megafon/index.html",
-    "main.5b37874e.css.map": "/Megafon/static/css/main.5b37874e.css.map",
-    "main.2ce37eea.js.map": "/Megafon/static/js/main.2ce37eea.js.map"
+    "main.e588bb9b.css.map": "/Megafon/static/css/main.e588bb9b.css.map",
+    "main.e1fbf367.js.map": "/Megafon/static/js/main.e1fbf367.js.map"
   },
   "entrypoints": [
-    "static/css/main.5b37874e.css",
-    "static/js/main.2ce37eea.js"
+    "static/css/main.e588bb9b.css",
+    "static/js/main.e1fbf367.js"
   ]
 }
