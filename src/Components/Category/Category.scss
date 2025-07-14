@@ -3,10 +3,6 @@
     transition: transform ease 0.3s;
 }
 
-.category.active {
-    .category-top {padding-bottom: 32px; transition: padding-bottom 0.3s ease;}
-}
-
 .category {
     &-list {
         box-sizing: border-box;
@@ -16,7 +12,6 @@
     }
 
     &-top {
-        padding-bottom: 0px;
         transition: padding-bottom 0.3s ease;
         cursor: pointer;
         display: flex;
@@ -40,7 +35,7 @@
 
     &-list-wrapper {
         box-sizing: border-box;
-        // padding-top: 32px;
+        padding-top: 32px;
         display: flex;
         flex-direction: column;
         gap: 16px;
