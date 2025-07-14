@@ -2,13 +2,22 @@
     transform: rotate(-180deg);
     transition: transform ease 0.3s;
 }
+
+.category.active {
+    .category-top {padding-bottom: 32px; transition: padding-bottom 0.3s ease;}
+}
+
 .category {
     &-list {
+        box-sizing: border-box;
         overflow: hidden;
-        transition: max-height 0.3s ease
+        transition: max-height 0.3s ease;
+        will-change: max-height;
     }
 
     &-top {
+        padding-bottom: 0px;
+        transition: padding-bottom 0.3s ease;
         cursor: pointer;
         display: flex;
         justify-content: space-between;
@@ -30,7 +39,8 @@
     }
 
     &-list-wrapper {
-        padding-top: 32px;
+        box-sizing: border-box;
+        // padding-top: 32px;
         display: flex;
         flex-direction: column;
         gap: 16px;

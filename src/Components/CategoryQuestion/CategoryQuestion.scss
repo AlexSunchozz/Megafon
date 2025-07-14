@@ -22,10 +22,11 @@
 
         &-top {
             cursor: pointer;
-            align-items: center;
+            align-items: flex-start;
             padding-bottom: 16px;
 
             &__descr {
+                padding-top: 5px;
                 color: var(--colorGray);
                 font-size: 14px;
                 line-height: 16px;
@@ -43,7 +44,7 @@
                 font-weight: 500;
                 display: flex;
                 justify-content: space-between;
-                align-items: center;
+                align-items: flex-start;
                 gap: 24px;
                 flex: 0 1 510px;
 
@@ -186,8 +187,9 @@
         flex-direction: column;
         align-items: baseline;
     }
-    .question-content-bottom__descr {padding-top: 0;}
+    .question-content-bottom__descr, .question-content-top__descr {padding-top: 0;}
     .question-content-top__title {
+        align-items: center;
         width: 100%;
     }
 }

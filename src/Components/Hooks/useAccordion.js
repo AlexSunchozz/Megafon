@@ -2,7 +2,7 @@ import { useState, useCallback } from "react";
 
 export const useAccordion = ({mode}) => {
     const [tab, setTabs] = useState(mode === 'multiply' ? [] : null);
-        
+
     const toggleTab = useCallback((id) => {
         if (mode === 'multiply') {
             setTabs(tab => 

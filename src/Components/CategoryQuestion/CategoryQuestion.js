@@ -30,14 +30,6 @@ const CategoryQuestion = ({ question, onVote, isVotes, isOpenQuestion, toggleQue
                 <div className={`question-content-bottom ${isOpenQuestion ? 'active' : ''}`} 
                         role="region"
                         aria-labelledby={`question-header-${question.id}`}
-                        // style={{
-                        // height: isOpenQuestion ? 'auto' : '0px',
-                        // transitionProperty: 'height, padding-bottom',
-                        // transitionDuration: '0.3s',
-                        // transitionTimingFunction: "ease",
-                        // overflow: 'hidden',
-                        // paddingBottom: isOpenQuestion ? '32px' : '0px'
-                        // }}
                         >
                     <p className="question-content-bottom__descr">ОТВЕТ</p>
                     <div className="question-content-bottom-container">

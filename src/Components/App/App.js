@@ -9,7 +9,7 @@ function App() {
   const [sortedCategories, setSortedCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Для сортировки c Local Storage -----
+  // // Для сортировки c Local Storage -----
 
   const initialVotes = () => {
     const votes = localStorage.getItem('votes');
@@ -39,18 +39,18 @@ function App() {
   }
 
 
-  // Для сортировки с LocalStorage ---------------------------------------
+  // // Для сортировки с LocalStorage ---------------------------------------
 
   const [votes, dispatch] = useReducer(votesReducer, {}, initialVotes);
 
-  // ---------------------------------------------------------------------
+  // // ---------------------------------------------------------------------
 
 
-  // Для сортировки без LocalStorage -------------------------------------
+  // // Для сортировки без LocalStorage -------------------------------------
 
-  // const [votes, dispatch] = useReducer(votesReducer, {});
+  // // const [votes, dispatch] = useReducer(votesReducer, {});
 
-  // ---------------------------------------------------------------------
+  // // ---------------------------------------------------------------------
 
 
   const handleVote = useCallback((payload) => {
@@ -59,8 +59,6 @@ function App() {
 
 
   // Сортировка вопросов внутри категорий и категорий по общему рейтингу вопросов
-  
-  // Только при обновлении страницы -------------------------------------------------------------------------
   const sortCategories = (categories, votes) => {
   return [...categories]
   .map((category) => ({
@@ -119,7 +117,8 @@ function App() {
             <CategoriesList 
               categories={sortedCategories}
               onVote={handleVote}
-              votes={votes}/>
+              votes={votes}
+            />
           }
         </div>
       </section>

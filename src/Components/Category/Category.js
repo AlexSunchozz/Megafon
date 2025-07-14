@@ -12,15 +12,13 @@ const Category = ({ name, questions, isOpen, toggleCategory, id, onVote, votes }
 
     // Обновляем maxHeight в зависимости от состояния isOpen и текущей высоты контента
     const updateHeight = useCallback(() => {
-        if (contentRef.current) {
-            setMaxHeight(isOpen 
-                ? `${contentRef.current.scrollHeight + parseInt(window.getComputedStyle(contentRef.current).paddingTop,10)}px` 
-                : '0px');
-        }
+        if (!contentRef.current) return;
+        
+        const height = contentRef.current.scrollHeight;
+        setMaxHeight(isOpen ? `${height + 40}px` : '0px');
     }, [isOpen]);
 
-    
-    // Обновляем maxHeight каждый раз при изменении isOpen
+    // Вызываем при открытии/закрытии категории и при изменении открытых вопросов
     useEffect(() => {
         updateHeight();
     }, [tab, updateHeight, isOpen]);
@@ -31,6 +29,7 @@ const Category = ({ name, questions, isOpen, toggleCategory, id, onVote, votes }
             clearTabs();
         }
     }, [isOpen, clearTabs])
+
 
     return (
         <div role="listitem" className={`faq-categories__item category ${isOpen ? 'active' : ''}`}>
@@ -61,7 +60,7 @@ const Category = ({ name, questions, isOpen, toggleCategory, id, onVote, votes }
                  role="region"
                  aria-labelledby={`category-header-${id}`}
                  style={{
-                    maxHeight,
+                    maxHeight
                  }}
             >
                 <div role="list"
