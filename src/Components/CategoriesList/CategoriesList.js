@@ -1,7 +1,7 @@
 import Category from '../Category/Category';
-import { useAccordion } from '../Hooks/useAccordion';
+import { useAccordion } from '../../Hooks/useAccordion';
 
-const CategoriesList = ({categories, onVote, votes}) => {
+const CategoriesList = ({categories, handleVote, votes}) => {
     const {toggleTab, isTabOpen} = useAccordion({mode: 'multiply'})
 
     return (
@@ -14,8 +14,8 @@ const CategoriesList = ({categories, onVote, votes}) => {
                 questions={category.questions}
                 toggleCategory={toggleTab}
                 id={category.id}
-                onVote={onVote}
                 votes={votes}
+                handleVote={handleVote}
               />
             ))}
           </div>

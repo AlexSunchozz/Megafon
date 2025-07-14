@@ -1,10 +1,10 @@
 import './Category.scss';
 import CategoryQuestion from "../CategoryQuestion/CategoryQuestion";
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { useAccordion } from '../Hooks/useAccordion';
+import { useAccordion } from '../../Hooks/useAccordion';
 import { memo } from "react";
 
-const Category = ({ name, questions, isOpen, toggleCategory, id, onVote, votes }) => {
+const Category = ({ name, questions, isOpen, toggleCategory, id, handleVote, votes }) => {
     const contentRef = useRef(null);
     const [maxHeight, setMaxHeight] = useState('0px');
 
@@ -13,7 +13,7 @@ const Category = ({ name, questions, isOpen, toggleCategory, id, onVote, votes }
     // Обновляем maxHeight в зависимости от состояния isOpen и текущей высоты контента
     const updateHeight = useCallback(() => {
         if (!contentRef.current) return;
-        
+
         const height = contentRef.current.scrollHeight;
         setMaxHeight(isOpen ? `${height + 40}px` : '0px');
     }, [isOpen]);
@@ -74,8 +74,8 @@ const Category = ({ name, questions, isOpen, toggleCategory, id, onVote, votes }
                             question={question}
                             isOpenQuestion={isTabOpen(question.id)}
                             toggleQuestion={toggleTab}
-                            onVote={onVote}
                             isVotes={votes[question.id] !== undefined}
+                            handleVote={handleVote}
                         />
                     ))}
                 </div>

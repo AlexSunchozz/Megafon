@@ -124,6 +124,12 @@
     }
 
     &__text {
+        &.voted {
+            height: 34px;
+            display: flex; 
+            align-items: center;
+        }
+        
         font-size: 12px;
         line-height: 1.5;
         color: var(--colorGray);

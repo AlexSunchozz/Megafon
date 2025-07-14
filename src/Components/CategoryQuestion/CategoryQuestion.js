@@ -1,7 +1,7 @@
 import './CategoryQuestion.scss';
 import { memo } from 'react';
 
-const CategoryQuestion = ({ question, onVote, isVotes, isOpenQuestion, toggleQuestion }) => {
+const CategoryQuestion = ({ question, isOpenQuestion, toggleQuestion, isVotes, handleVote }) => {
 
     return (
         <div className={`category-list__item question ${isOpenQuestion ? 'active' : ''}`}
@@ -37,15 +37,15 @@ const CategoryQuestion = ({ question, onVote, isVotes, isOpenQuestion, toggleQue
                         <div className="question-bottom__raiting raiting">
                             <div className="raiting-container">
                                 {isVotes ? 
-                                    <div className="raiting__text"
-                                         style={{margin: '8px 0px', transition: 'margin ease 0.3s'}}>Отзыв отправлен, спасибо!</div> :
+                                        <div className="raiting__text voted">Отзыв отправлен, спасибо!</div> 
+                                    :
                                     <>
                                         <div className="raiting__text">Информация была полезной?</div>
                                         <div className="raiting__btns">
                                             <button type="button" className="raiting__btns-yes"
-                                                    onClick={(e) => onVote({questionId: question.id, value: 1})}>ДА</button>
+                                                    onClick={(e) => handleVote({questionId: question.id, value: 1})}>ДА</button>
                                             <button type="button" className="raiting__btns-no"
-                                                    onClick={(e) => onVote({questionId: question.id, value: -1})}>НЕТ</button>
+                                                    onClick={(e) => handleVote({questionId: question.id, value: -1})}>НЕТ</button>
                                         </div>
                                     </>
                                 }

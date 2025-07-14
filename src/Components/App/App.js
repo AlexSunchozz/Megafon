@@ -1,110 +1,21 @@
 import './App.scss';
-import { useEffect, useReducer, useState, useCallback } from 'react';
 import CategoriesList from '../CategoriesList/CategoriesList';
-
-// const DATA_URL = 'https://gist.githubusercontent.com/atihonem/f5776c4b1cdc6374aa46f5f544636469/raw/a9180f6b17fe2b99404ad335ed83dbdc0d996371/data.json';
-const DATA_URL = process.env.PUBLIC_URL + '/data/data.json';
+import { useEffect, useState } from 'react';
+import { useCategoriesData } from '../../Hooks/useCategoriesData';
+import { useVotes } from '../../Hooks/useVotes';
 
 function App() {
+  const {categories, isLoading} = useCategoriesData();
+  const {sortCategories, votes, handleVote} = useVotes();
   const [sortedCategories, setSortedCategories] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
 
-  // // Для сортировки c Local Storage -----
-
-  const initialVotes = () => {
-    const votes = localStorage.getItem('votes');
-    return votes ? JSON.parse(votes) : {};
-  }
-
-  // ------------------------------------
-
-
-  const votesReducer = (state, action) => {
-    const {questionId, value} = action.payload;
-
-    switch(action.type) {
-      case "VOTE": 
-        const updatedVotes = {...state, [questionId]: (state[questionId] || 0) + value}
-
-        //Обновляем local storage
-        localStorage.setItem('votes', JSON.stringify(updatedVotes));
-
-        console.log(`Вы проголосовали за вопрос: ${questionId}. Теперь рейтинг вопроса: ${updatedVotes[questionId]}`)
-        
-        return updatedVotes
-
-      default:
-        throw new Error(`Unhandled action type: ${action.type}`);
-    }
-  }
-
-
-  // // Для сортировки с LocalStorage ---------------------------------------
-
-  const [votes, dispatch] = useReducer(votesReducer, {}, initialVotes);
-
-  // // ---------------------------------------------------------------------
-
-
-  // // Для сортировки без LocalStorage -------------------------------------
-
-  // // const [votes, dispatch] = useReducer(votesReducer, {});
-
-  // // ---------------------------------------------------------------------
-
-
-  const handleVote = useCallback((payload) => {
-    dispatch({ type: "VOTE", payload });
-  }, []);
-
-
-  // Сортировка вопросов внутри категорий и категорий по общему рейтингу вопросов
-  const sortCategories = (categories, votes) => {
-  return [...categories]
-  .map((category) => ({
-      ...category, 
-      // Добавляем индекс к каждому вопросу в случае, если в json придут вопросы не по порядку своего id
-      questions: [...category.questions.map((question, i) => ({...question, index: i}))].sort((a, b) => {
-          const ratingA = votes[a.id] || 0;
-          const ratingB = votes[b.id] || 0;
-
-          // Если рейтинг вопросов одинаковые, то сохраняем изначальный порядок из файла (устойчивая сортировка)
-          return ratingB !== ratingA ? ratingB - ratingA : a.index - b.index;
-      })
-      })).sort((a,b) => {
-      const totalRatingA = a.questions.reduce((sum, question) => sum + (votes[question.id] || 0), 0);
-      const totalRatingB = b.questions.reduce((sum, question) => sum + (votes[question.id] || 0), 0);
-      return totalRatingB - totalRatingA
-      });
-  }
-
-
-  // Получение данных
+  
   useEffect(() => {
-    const loadData = async () => {
-      try {
-        const res = await fetch(DATA_URL);
-
-        if (!res.ok) throw new Error("Ошибка загрузки данных");
-
-        const json = await res.json();
-
-        if (json.categories.length > 0) {
-          const votesFromStorage = initialVotes();
-
-          setSortedCategories(sortCategories(json.categories, votesFromStorage));
-        }
-        
-      } catch (error) {
-        console.error("Ошибка:", error);
-      }
-      finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadData();
-  }, []);
+    if (categories.length > 0) {
+      const sortedData = sortCategories(categories);
+      setSortedCategories(sortedData); 
+    }
+  },[categories])
 
   return (
     <div className="app-wrapper">
@@ -116,8 +27,8 @@ function App() {
           ) :
             <CategoriesList 
               categories={sortedCategories}
-              onVote={handleVote}
               votes={votes}
+              handleVote={handleVote}
             />
           }
         </div>
